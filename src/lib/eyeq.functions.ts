@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import type { Json } from "@/integrations/supabase/types";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const conditionSchema = z.object({
@@ -153,8 +154,8 @@ export const saveTestSession = createServerFn({ method: "POST" })
       contrast_score: data.contrastScore,
       risk_score: data.riskScore,
       anomaly_flags: data.anomalyFlags,
-      rounds: data.rounds,
-      prescription: data.prescription,
+      rounds: data.rounds as Json,
+      prescription: data.prescription as Json,
     });
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -187,7 +188,7 @@ export const saveDetection = createServerFn({ method: "POST" })
       user_id: userId,
       image_path: path,
       verdict: data.verdict,
-      conditions: data.conditions,
+      conditions: data.conditions as unknown as Json,
       confidence: data.confidence,
       disposition: data.disposition,
     });

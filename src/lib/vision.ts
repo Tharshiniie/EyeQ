@@ -11,8 +11,8 @@ export type AcuityAnswer = {
 export type ColorPlate = {
   number: string; // correct answer
   options: string[];
-  fg: string; // dot colors for the number
-  bg: string; // dot colors for the field
+  fg: string[]; // dot colors for the number
+  bg: string[]; // dot colors for the field
 };
 
 export type RoundKey = "calibration" | "acuity" | "color" | "astigmatism" | "contrast";
@@ -73,7 +73,7 @@ export function finishLogMar(answers: AcuityAnswer[]): number {
   if (answers.length === 0) return 1.0;
   // Threshold = the smallest level answered correctly; fallback to last tested.
   const correct = answers.filter((a) => a.correct);
-  if (correct.length === 0) return ACUITY_LEVELS[0];
+  if (correct.length === 0) return ACUITY_LEVELS[0]!;
   return Math.min(...correct.map((a) => a.logMar));
 }
 
@@ -118,7 +118,7 @@ export function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+    [a[i], a[j]] = [a[j]!, a[i]!];
   }
   return a;
 }
@@ -172,7 +172,7 @@ export function detectAnomalies(r: TestResults): string[] {
   for (const eye of [r.acuity.left, r.acuity.right]) {
     const seq = eye.answers;
     let flips = 0;
-    for (let i = 1; i < seq.length; i++) if (seq[i].correct !== seq[i - 1].correct) flips++;
+    for (let i = 1; i < seq.length; i++) if (seq[i]!.correct !== seq[i - 1]!.correct) flips++;
     if (seq.length >= 6 && flips >= seq.length - 1) {
       flags.push("Alternating right/wrong answers suggest guessing in the acuity round.");
       break;
