@@ -76,7 +76,54 @@ export const analyzeEyePhoto = createServerFn({ method: "POST" })
     };
   });
 
+export const writeAdvisory = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        riskScore: z.number(),
+        acuityLeft: z.string(),
+        acuityRight: z.string(),
+        colorScore: z.string(),
+        astigmatism: z.boolean(),
+        contrastScore: z.number(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const key = process.env["LOVABLE_API_KEY"];
+    const fallback =
+      "Keep up regular eye checks, take a 20-second screen break every 20 minutes, and see an eye care professional if anything changes.";
+    if (!key) return { advisory: fallback };
+    try {
+      const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+        body: JSON.stringify({
+          model: "google/gemini-3.7-flash",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You explain at-home vision screening results in plain, calm language. Write 3-4 short sentences: what the numbers suggest, one or two practical habits, and when to see an eye care professional. Never diagnose. No lists, no markdown.",
+            },
+            {
+              role: "user",
+              content: `Risk score ${data.riskScore}/100. Acuity left ${data.acuityLeft}, right ${data.acuityRight}. Color plates ${data.colorScore}. Astigmatism signs: ${data.astigmatism ? "yes" : "no"}. Contrast sensitivity ${data.contrastScore}%.`,
+            },
+          ],
+        }),
+      });
+      if (!res.ok) return { advisory: fallback };
+      const json = await res.json();
+      const text = json?.choices?.[0]?.message?.content;
+      return { advisory: typeof text === "string" && text.trim() ? text.trim() : fallback };
+    } catch {
+      return { advisory: fallback };
+    }
+  });
+
 export const saveTestSession = createServerFn({ method: "POST" })
+
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) =>
     z
