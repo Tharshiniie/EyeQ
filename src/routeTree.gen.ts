@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DetectRouteImport } from './routes/detect'
+import { Route as ResultsRouteImport } from './routes/results'
 import { Route as TestRouteImport } from './routes/test'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const DetectRoute = DetectRouteImport.update({
   path: '/detect',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResultsRoute = ResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TestRoute = TestRouteImport.update({
   id: '/test',
   path: '/test',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/detect': typeof DetectRoute
+  '/results': typeof ResultsRoute
   '/test': typeof TestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/detect': typeof DetectRoute
+  '/results': typeof ResultsRoute
   '/test': typeof TestRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/detect': typeof DetectRoute
+  '/results': typeof ResultsRoute
   '/test': typeof TestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/detect' | '/test'
+  fullPaths: '/' | '/auth' | '/detect' | '/results' | '/test'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/detect' | '/test'
-  id: '__root__' | '/' | '/auth' | '/detect' | '/test'
+  to: '/' | '/auth' | '/detect' | '/results' | '/test'
+  id: '__root__' | '/' | '/auth' | '/detect' | '/results' | '/test'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   DetectRoute: typeof DetectRoute
+  ResultsRoute: typeof ResultsRoute
   TestRoute: typeof TestRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DetectRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/results': {
+      id: '/results'
+      path: '/results'
+      fullPath: '/results'
+      preLoaderRoute: typeof ResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/test': {
       id: '/test'
       path: '/test'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   DetectRoute: DetectRoute,
+  ResultsRoute: ResultsRoute,
   TestRoute: TestRoute,
 }
 export const routeTree = rootRouteImport
