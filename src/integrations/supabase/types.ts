@@ -14,7 +14,105 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      detections: {
+        Row: {
+          conditions: Json
+          confidence: number | null
+          created_at: string
+          disposition: string | null
+          id: string
+          image_path: string
+          user_id: string
+          verdict: string
+        }
+        Insert: {
+          conditions?: Json
+          confidence?: number | null
+          created_at?: string
+          disposition?: string | null
+          id?: string
+          image_path: string
+          user_id: string
+          verdict: string
+        }
+        Update: {
+          conditions?: Json
+          confidence?: number | null
+          created_at?: string
+          disposition?: string | null
+          id?: string
+          image_path?: string
+          user_id?: string
+          verdict?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      test_sessions: {
+        Row: {
+          acuity_left: number | null
+          acuity_right: number | null
+          anomaly_flags: Json
+          astigmatism: boolean | null
+          color_score: number | null
+          color_total: number | null
+          contrast_score: number | null
+          created_at: string
+          id: string
+          prescription: Json
+          risk_score: number | null
+          rounds: Json
+          user_id: string
+        }
+        Insert: {
+          acuity_left?: number | null
+          acuity_right?: number | null
+          anomaly_flags?: Json
+          astigmatism?: boolean | null
+          color_score?: number | null
+          color_total?: number | null
+          contrast_score?: number | null
+          created_at?: string
+          id?: string
+          prescription?: Json
+          risk_score?: number | null
+          rounds?: Json
+          user_id: string
+        }
+        Update: {
+          acuity_left?: number | null
+          acuity_right?: number | null
+          anomaly_flags?: Json
+          astigmatism?: boolean | null
+          color_score?: number | null
+          color_total?: number | null
+          contrast_score?: number | null
+          created_at?: string
+          id?: string
+          prescription?: Json
+          risk_score?: number | null
+          rounds?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
