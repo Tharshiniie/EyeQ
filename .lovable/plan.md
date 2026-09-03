@@ -21,7 +21,7 @@ Key rule: the whole test runs in browser state with no account. On finishing, re
 
 You weren't sure of the round list, so here's a proposed set — five short rounds, roughly 4 minutes total. Say the word if you want any swapped.
 
-1. **Calibration** — user sizes an on-screen credit card / holds a set distance so letter sizes are meaningful.
+1. **Calibration** — user sizes an on-screen credit card / holds a set distance so letter sizes are meaningful. **Optional stretch (your camera idea):** before the test, request webcam access and use in-browser face detection (MediaPipe) to estimate interpupillary distance and keep the user near the target viewing distance — a subtle "move closer / farther" hint. If permission is denied or detection fails, it silently falls back to manual calibration. Scheduled only if Days 1-2 land on time; never blocks the test.
 2. **Visual acuity** — shrinking Snellen-style letters, one eye at a time.
 3. **Color vision** — Ishihara-style plates (rendered, not photos).
 4. **Astigmatism** — radial fan dial; user reports darker lines.
@@ -58,6 +58,7 @@ Each round: instruction card -> the test -> auto-advance. A progress bar shows r
 
 **Day 3**
 - Together: prescription generation + report download, lens simulator, polish, mobile pass, disclaimers, demo run-through.
+- If on schedule: camera-based distance check as an upgrade to calibration (face detection, falls back to manual). If tight: skip it entirely.
 - Buffer: if you fall behind, eye disease detection is the first thing dropped (per your answer) — the home page card becomes "coming soon" and everything else still demos cleanly.
 
 ## Technical notes
