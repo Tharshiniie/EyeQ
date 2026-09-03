@@ -116,11 +116,11 @@ export function AcuityRound({
 }) {
   const [stair, setStair] = useState<Staircase>(() => createStaircase(4));
   const [answers, setAnswers] = useState<AcuityAnswer[]>([]);
-  const [letter, setLetter] = useState<string>(() => OPTOTYPES[Math.floor(Math.random() * OPTOTYPES.length)]);
+  const [letter, setLetter] = useState<string>(() => OPTOTYPES[Math.floor(Math.random() * OPTOTYPES.length)]!);
   const [options, setOptions] = useState<string[]>([]);
   const shownAt = useRef(Date.now());
 
-  const logMar = ACUITY_LEVELS[stair.level];
+  const logMar = ACUITY_LEVELS[stair.level] ?? 1.0;
   const px = letterPxForLogMar(logMar, pxPerMm);
 
   useEffect(() => {
@@ -144,7 +144,7 @@ export function AcuityRound({
     setStair(nextStair);
     let nextLetter = letter;
     while (nextLetter === letter) {
-      nextLetter = OPTOTYPES[Math.floor(Math.random() * OPTOTYPES.length)];
+      nextLetter = OPTOTYPES[Math.floor(Math.random() * OPTOTYPES.length)]!;
     }
     setLetter(nextLetter);
   };
@@ -206,7 +206,7 @@ function PlateCanvas({ number, index }: { number: string; index: number }) {
       const dy = y - size / 2;
       if (dx * dx + dy * dy > (size / 2 - 8) ** 2) continue;
       const r = 4 + rand() * 9;
-      const px = data[(Math.floor(y) * size + Math.floor(x)) * 4];
+      const px = data[(Math.floor(y) * size + Math.floor(x)) * 4] ?? 0;
       out.push({ x, y, r, fg: px > 128 });
     }
     setDots(out);
@@ -240,7 +240,7 @@ export function ColorRound({
   const [correct, setCorrect] = useState(0);
   const [misses, setMisses] = useState<string[]>([]);
 
-  const plate = plates[idx];
+  const plate = plates[idx]!;
 
   const pick = (value: string) => {
     const isRight = value === plate.number;
@@ -323,7 +323,7 @@ const CONTRAST_OPACITY = [0.55, 0.4, 0.28, 0.18, 0.1];
 export function ContrastRound({ onDone }: { onDone: (answers: AcuityAnswer[]) => void }) {
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<AcuityAnswer[]>([]);
-  const [letter, setLetter] = useState<string>(() => OPTOTYPES[Math.floor(Math.random() * OPTOTYPES.length)]);
+  const [letter, setLetter] = useState<string>(() => OPTOTYPES[Math.floor(Math.random() * OPTOTYPES.length)]!);
   const [options, setOptions] = useState<string[]>([]);
   const shownAt = useRef(Date.now());
 
@@ -347,7 +347,7 @@ export function ContrastRound({ onDone }: { onDone: (answers: AcuityAnswer[]) =>
     setIdx(idx + 1);
     let nextLetter = letter;
     while (nextLetter === letter) {
-      nextLetter = OPTOTYPES[Math.floor(Math.random() * OPTOTYPES.length)];
+      nextLetter = OPTOTYPES[Math.floor(Math.random() * OPTOTYPES.length)]!;
     }
     setLetter(nextLetter);
   };
