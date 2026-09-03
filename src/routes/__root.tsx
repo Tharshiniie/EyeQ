@@ -8,9 +8,12 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Eye } from "lucide-react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { useAuth } from "@/hooks/use-auth";
+import { useFlushPendingResults } from "@/lib/flush-pending";
 
 function NotFoundComponent() {
   return (
@@ -77,21 +80,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "EyeQ — Free Online Vision Screening" },
+      {
+        name: "description",
+        content:
+          "EyeQ is a free, anonymous vision screening: adaptive eye test, AI eye-photo check, eye health risk score, and a downloadable report.",
+      },
+      { name: "author", content: "EyeQ" },
+      { property: "og:title", content: "EyeQ — Free Online Vision Screening" },
+      {
+        property: "og:description",
+        content:
+          "Take a 4-minute adaptive vision test, check an eye photo with AI, and get your eye health risk score — free and anonymous.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
   shellComponent: RootShell,
@@ -102,7 +115,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
@@ -114,13 +127,70 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function Header() {
+  const { user } = useAuth();
+  return (
+    <header className="no-print sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
+      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+        <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold">
+          <Eye className="h-5 w-5 text-primary" />
+          <span>
+            Eye<span className="text-primary">Q</span>
+          </span>
+        </Link>
+        <nav className="flex items-center gap-1 text-sm">
+          <Link
+            to="/test"
+            className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            Vision test
+          </Link>
+          <Link
+            to="/detect"
+            className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            Photo check
+          </Link>
+          {user ? (
+            <Link
+              to="/dashboard"
+              className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              My results
+            </Link>
+          ) : (
+            <Link
+              to="/auth"
+              className="rounded-md border border-border px-3 py-1.5 text-foreground transition-colors hover:bg-accent"
+            >
+              Log in
+            </Link>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { user } = useAuth();
+  useFlushPendingResults(!!user);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <footer className="no-print border-t border-border py-6">
+          <p className="mx-auto max-w-5xl px-4 text-center text-xs text-muted-foreground">
+            EyeQ is a screening tool, not a medical device. It does not diagnose, treat, or
+            prescribe. Always consult a qualified eye care professional.
+          </p>
+        </footer>
+      </div>
     </QueryClientProvider>
   );
 }
