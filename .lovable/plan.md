@@ -21,7 +21,7 @@ Key rule: the whole test runs in browser state with no account. On finishing, re
 
 You weren't sure of the round list, so here's a proposed set — five short rounds, roughly 4 minutes total. Say the word if you want any swapped.
 
-1. **Calibration** — user sizes an on-screen credit card / holds a set distance so letter sizes are meaningful.
+1. **Calibration** — user sizes an on-screen credit card / holds a set distance so letter sizes are meaningful. **Optional stretch (your camera idea):** before the test, request webcam access and use in-browser face detection (MediaPipe) to estimate interpupillary distance and keep the user near the target viewing distance — a subtle "move closer / farther" hint. If permission is denied or detection fails, it silently falls back to manual calibration. Scheduled only if Days 1-2 land on time; never blocks the test.
 2. **Visual acuity** — shrinking Snellen-style letters, one eye at a time.
 3. **Color vision** — Ishihara-style plates (rendered, not photos).
 4. **Astigmatism** — radial fan dial; user reports darker lines.
