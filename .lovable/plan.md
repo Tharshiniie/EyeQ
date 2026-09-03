@@ -58,6 +58,7 @@ Each round: instruction card -> the test -> auto-advance. A progress bar shows r
 
 **Day 3**
 - Together: prescription generation + report download, lens simulator, polish, mobile pass, disclaimers, demo run-through.
+- If on schedule: camera-based distance check as an upgrade to calibration (face detection, falls back to manual). If tight: skip it entirely.
 - Buffer: if you fall behind, eye disease detection is the first thing dropped (per your answer) — the home page card becomes "coming soon" and everything else still demos cleanly.
 
 ## Technical notes
