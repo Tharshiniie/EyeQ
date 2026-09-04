@@ -153,6 +153,7 @@ function Header() {
           >
             Photo check
           </Link>
+          <ThemeToggle />
           {user ? (
             <Link
               to="/dashboard"
