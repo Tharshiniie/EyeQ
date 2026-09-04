@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { useAuth } from "@/hooks/use-auth";
 import { useFlushPendingResults } from "@/lib/flush-pending";
+import { ThemeToggle, themeInitScript } from "@/components/theme-toggle";
 
 function NotFoundComponent() {
   return (
