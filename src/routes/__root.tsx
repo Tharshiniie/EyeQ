@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { useAuth } from "@/hooks/use-auth";
 import { useFlushPendingResults } from "@/lib/flush-pending";
+import { ThemeToggle, themeInitScript } from "@/components/theme-toggle";
 
 function NotFoundComponent() {
   return (
@@ -118,6 +119,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" className="dark">
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
         {children}
@@ -151,6 +153,7 @@ function Header() {
           >
             Photo check
           </Link>
+          <ThemeToggle />
           {user ? (
             <Link
               to="/dashboard"

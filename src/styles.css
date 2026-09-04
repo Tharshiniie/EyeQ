@@ -42,59 +42,61 @@
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
+/* Light theme — warm parchment, never pure white */
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.145 0.035 255);
-  --foreground: oklch(0.94 0.015 220);
-  --card: oklch(0.185 0.04 255);
-  --card-foreground: oklch(0.94 0.015 220);
-  --popover: oklch(0.2 0.045 255);
-  --popover-foreground: oklch(0.94 0.015 220);
-  --primary: oklch(0.78 0.14 195);
-  --primary-foreground: oklch(0.16 0.04 255);
-  --secondary: oklch(0.24 0.045 255);
-  --secondary-foreground: oklch(0.94 0.015 220);
-  --muted: oklch(0.24 0.045 255);
-  --muted-foreground: oklch(0.65 0.03 240);
-  --accent: oklch(0.28 0.06 210);
-  --accent-foreground: oklch(0.94 0.015 220);
-  --destructive: oklch(0.62 0.2 25);
-  --destructive-foreground: oklch(0.97 0.01 220);
-  --border: oklch(0.3 0.04 250);
-  --input: oklch(0.32 0.04 250);
-  --ring: oklch(0.78 0.14 195);
-  --chart-1: oklch(0.78 0.14 195);
-  --chart-2: oklch(0.7 0.15 160);
-  --chart-3: oklch(0.75 0.16 85);
-  --chart-4: oklch(0.65 0.2 300);
-  --chart-5: oklch(0.65 0.22 25);
+  --background: oklch(0.945 0.022 85);
+  --foreground: oklch(0.24 0.03 60);
+  --card: oklch(0.975 0.018 88);
+  --card-foreground: oklch(0.24 0.03 60);
+  --popover: oklch(0.975 0.018 88);
+  --popover-foreground: oklch(0.24 0.03 60);
+  --primary: oklch(0.56 0.16 45);
+  --primary-foreground: oklch(0.98 0.015 85);
+  --secondary: oklch(0.9 0.03 82);
+  --secondary-foreground: oklch(0.28 0.035 60);
+  --muted: oklch(0.9 0.03 82);
+  --muted-foreground: oklch(0.47 0.035 65);
+  --accent: oklch(0.88 0.05 75);
+  --accent-foreground: oklch(0.26 0.035 60);
+  --destructive: oklch(0.55 0.19 27);
+  --destructive-foreground: oklch(0.98 0.015 85);
+  --border: oklch(0.85 0.035 80);
+  --input: oklch(0.82 0.035 80);
+  --ring: oklch(0.56 0.16 45);
+  --chart-1: oklch(0.56 0.16 45);
+  --chart-2: oklch(0.55 0.13 150);
+  --chart-3: oklch(0.62 0.14 95);
+  --chart-4: oklch(0.5 0.14 300);
+  --chart-5: oklch(0.55 0.19 27);
 }
 
+/* Dark theme — warm ink, amber accent */
 .dark {
-  --background: oklch(0.145 0.035 255);
-  --foreground: oklch(0.94 0.015 220);
-  --card: oklch(0.185 0.04 255);
-  --card-foreground: oklch(0.94 0.015 220);
-  --popover: oklch(0.2 0.045 255);
-  --popover-foreground: oklch(0.94 0.015 220);
-  --primary: oklch(0.78 0.14 195);
-  --primary-foreground: oklch(0.16 0.04 255);
-  --secondary: oklch(0.24 0.045 255);
-  --secondary-foreground: oklch(0.94 0.015 220);
-  --muted: oklch(0.24 0.045 255);
-  --muted-foreground: oklch(0.65 0.03 240);
-  --accent: oklch(0.28 0.06 210);
-  --accent-foreground: oklch(0.94 0.015 220);
-  --destructive: oklch(0.62 0.2 25);
-  --destructive-foreground: oklch(0.97 0.01 220);
-  --border: oklch(0.3 0.04 250);
-  --input: oklch(0.32 0.04 250);
-  --ring: oklch(0.78 0.14 195);
-  --chart-1: oklch(0.78 0.14 195);
-  --chart-2: oklch(0.7 0.15 160);
-  --chart-3: oklch(0.75 0.16 85);
-  --chart-4: oklch(0.65 0.2 300);
-  --chart-5: oklch(0.65 0.22 25);
+  --background: oklch(0.175 0.018 55);
+  --foreground: oklch(0.93 0.02 85);
+  --card: oklch(0.215 0.022 55);
+  --card-foreground: oklch(0.93 0.02 85);
+  --popover: oklch(0.235 0.024 55);
+  --popover-foreground: oklch(0.93 0.02 85);
+  --primary: oklch(0.79 0.15 68);
+  --primary-foreground: oklch(0.2 0.03 55);
+  --secondary: oklch(0.27 0.025 55);
+  --secondary-foreground: oklch(0.93 0.02 85);
+  --muted: oklch(0.27 0.025 55);
+  --muted-foreground: oklch(0.68 0.03 75);
+  --accent: oklch(0.32 0.045 65);
+  --accent-foreground: oklch(0.93 0.02 85);
+  --destructive: oklch(0.63 0.2 27);
+  --destructive-foreground: oklch(0.97 0.015 85);
+  --border: oklch(0.32 0.03 60);
+  --input: oklch(0.35 0.03 60);
+  --ring: oklch(0.79 0.15 68);
+  --chart-1: oklch(0.79 0.15 68);
+  --chart-2: oklch(0.72 0.14 155);
+  --chart-3: oklch(0.78 0.15 100);
+  --chart-4: oklch(0.68 0.17 300);
+  --chart-5: oklch(0.66 0.2 27);
 }
 
 @layer base {
@@ -115,11 +117,13 @@
 }
 
 @utility text-glow {
-  text-shadow: 0 0 24px oklch(0.78 0.14 195 / 45%);
+  text-shadow: 0 0 24px color-mix(in oklab, var(--primary) 40%, transparent);
 }
 
 @utility card-ring {
-  box-shadow: inset 0 0 0 1px oklch(0.78 0.14 195 / 12%), 0 8px 40px oklch(0.1 0.03 255 / 60%);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--primary) 14%, transparent),
+    0 8px 40px color-mix(in oklab, var(--foreground) 12%, transparent);
 }
 
 @media print {
