@@ -1,10 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Download, Loader2, Sparkles } from "lucide-react";
+import { Download, Home, Loader2, Sparkles } from "lucide-react";
 import {
+  blurPxForPower,
   computeRiskScore,
   detectAnomalies,
+  estimateEyePower,
   estimatePrescription,
   logMarToSnellen,
   riskBand,
@@ -79,11 +81,10 @@ function ResultsView({ results, signedIn }: { results: TestResults; signedIn: bo
   const band = riskBand(score);
   const flags = useMemo(() => detectAnomalies(results), [results]);
   const rx = useMemo(() => estimatePrescription(results), [results]);
+  const power = useMemo(() => estimateEyePower(results), [results]);
   const advise = useServerFn(writeAdvisory);
   const [advisory, setAdvisory] = useState<string | null>(null);
   const [advising, setAdvising] = useState(false);
-
-  const worstLogMar = Math.max(results.acuity.left.logMar, results.acuity.right.logMar);
 
   useEffect(() => {
     let cancelled = false;
@@ -133,6 +134,33 @@ function ResultsView({ results, signedIn }: { results: TestResults; signedIn: bo
           {new Date(results.finishedAt).toLocaleString()}
         </p>
       </header>
+
+      {/* Estimated eye power — headline result */}
+      <section className="card-ring mt-8 rounded-2xl bg-card p-8">
+        <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          Estimated eye power
+        </p>
+        <p className="mt-3 font-display text-2xl font-semibold sm:text-3xl">{power.headline}</p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          {(["left", "right"] as const).map((eye) => (
+            <div key={eye} className="rounded-2xl border border-border bg-background p-5">
+              <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+                {eye} eye
+              </p>
+              <p className="mt-2 font-display text-4xl font-semibold text-primary">
+                {power[eye].sph === 0 ? "0.00" : power[eye].sph.toFixed(2)}
+                <span className="ml-1 text-lg text-muted-foreground">D</span>
+              </p>
+              <p className="mt-1 font-mono text-xs text-muted-foreground">
+                {power[eye].snellen}
+                {power[eye].cyl ? ` · cyl ${power[eye].cyl.toFixed(2)}D` : ""}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">{power[eye].note}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground">{power.disclaimer}</p>
+      </section>
 
       {/* Risk dial */}
       <section className="card-ring mt-10 rounded-2xl bg-card p-8 text-center">
@@ -196,7 +224,7 @@ function ResultsView({ results, signedIn }: { results: TestResults; signedIn: bo
       </section>
 
       {/* Lens simulator */}
-      <LensSimulator logMar={worstLogMar} />
+      <LensSimulator sph={Math.min(power.left.sph, power.right.sph)} />
 
       {/* Prescription */}
       <section className="mt-8">
@@ -257,6 +285,12 @@ function ResultsView({ results, signedIn }: { results: TestResults; signedIn: bo
             Saved — view your history
           </Link>
         )}
+        <Link
+          to="/"
+          className="flex items-center justify-center gap-2 rounded-xl border border-border px-8 py-3.5 text-sm font-semibold hover:bg-secondary"
+        >
+          <Home className="h-4 w-4" /> Home
+        </Link>
         <button
           onClick={() => window.print()}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border px-8 py-3.5 text-sm font-semibold hover:bg-secondary"
@@ -321,27 +355,44 @@ function Stat({ label, value, hint }: { label: string; value: string; hint: stri
   );
 }
 
-function LensSimulator({ logMar }: { logMar: number }) {
-  const estimatedBlur = Math.max(0, logMar) * 6;
+function LensSimulator({ sph }: { sph: number }) {
+  const baseline = Math.max(1.5, blurPxForPower(sph));
   const [corrected, setCorrected] = useState(0);
-  const blur = Math.max(0, estimatedBlur * (1 - corrected / 100));
+  const blur = baseline * (1 - corrected / 100);
+
+  const Scene = ({ px, label }: { px: number; label: string }) => (
+    <div className="flex-1">
+      <p className="border-b border-border bg-secondary/60 px-4 py-2 text-center font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+        {label}
+      </p>
+      <div className="relative flex h-52 items-center justify-center overflow-hidden bg-gradient-to-b from-secondary/40 to-card">
+        <div
+          className="w-full px-6 text-center transition-[filter] duration-150"
+          style={{ filter: `blur(${px}px)` }}
+        >
+          <p className="font-display text-2xl font-bold tracking-wide">PLATFORM 3</p>
+          <p className="mt-1 font-display text-lg font-semibold text-primary">Bus 42 · Central</p>
+          <p className="mt-3 text-xs text-muted-foreground">Departs 14:20 — stand behind the line</p>
+          <p className="mt-3 font-mono text-[11px] text-muted-foreground">
+            E F P T O Z &nbsp; L P E D
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <section className="mt-8 print:hidden">
-      <h2 className="font-display text-xl font-semibold">What your vision looks like</h2>
+      <h2 className="font-display text-xl font-semibold">How blurry the world looks to you</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Drag to add correction and see the difference glasses could make.
+        {sph === 0
+          ? "Your distance vision tested sharp, so we show a very mild reference blur. Drag the slider to see the correction effect."
+          : `Based on your estimated ${sph.toFixed(2)}D, this is roughly how a distant sign looks — drag to add correction.`}
       </p>
       <div className="card-ring mt-4 overflow-hidden rounded-2xl bg-card">
-        <div className="relative flex h-56 items-center justify-center overflow-hidden bg-gradient-to-br from-secondary to-card">
-          <div
-            className="px-8 text-center transition-[filter] duration-150"
-            style={{ filter: `blur(${blur}px)` }}
-          >
-            <p className="font-display text-3xl font-semibold">Bus 42 — Central Station</p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Departs in 4 minutes from platform B
-            </p>
-          </div>
+        <div className="flex flex-col divide-y divide-border sm:flex-row sm:divide-x sm:divide-y-0">
+          <Scene px={baseline} label="Your eyes now" />
+          <Scene px={blur} label={`With ${corrected}% correction`} />
         </div>
         <div className="border-t border-border p-5">
           <input
@@ -354,8 +405,8 @@ function LensSimulator({ logMar }: { logMar: number }) {
             aria-label="Correction strength"
           />
           <div className="mt-2 flex justify-between font-mono text-xs text-muted-foreground">
-            <span>Uncorrected</span>
-            <span>{corrected}% corrected</span>
+            <span>No glasses</span>
+            <span>{blur.toFixed(1)}px blur</span>
             <span>Full correction</span>
           </div>
         </div>
