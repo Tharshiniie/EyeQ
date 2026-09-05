@@ -29,6 +29,8 @@ export type TestResults = {
   color: { correct: number; total: number; misses: string[] };
   astigmatism: { linesUnequal: boolean; axis?: number };
   contrast: { answers: AcuityAnswer[]; score: number };
+  snellen?: { left: number; right: number };
+  duochrome?: { left: "red" | "green" | "equal"; right: "red" | "green" | "equal" };
 };
 
 // --- Adaptive staircase (acuity & contrast) -------------------------------
@@ -192,30 +194,106 @@ export type PrescriptionEstimate = {
 };
 
 export function estimatePrescription(r: TestResults): PrescriptionEstimate {
-  const sphFromLogMar = (lm: number) => {
-    if (lm <= 0) return 0;
-    return -Math.round((lm / 0.25) * 2) / 2 * 0.5; // rough: 0.1 logMAR ≈ -0.25D
-  };
-  const cyl = r.astigmatism.linesUnequal ? -0.75 : 0;
-  const mk = (lm: number) => {
-    const sph = sphFromLogMar(lm);
-    return {
-      sph,
-      cyl,
-      note:
-        sph === 0 && cyl === 0
-          ? "No significant refractive error estimated."
-          : `Estimated myopia of about ${sph.toFixed(2)}D${cyl ? " with mild astigmatism" : ""}.`,
-    };
-  };
+  const power = estimateEyePower(r);
   return {
-    left: mk(r.acuity.left.logMar),
-    right: mk(r.acuity.right.logMar),
-    disclaimer:
-      "This is a rough screening estimate only — not a prescription. Only an eye care professional can prescribe lenses.",
+    left: { sph: power.left.sph, cyl: power.left.cyl, note: power.left.note },
+    right: { sph: power.right.sph, cyl: power.right.cyl, note: power.right.note },
+    disclaimer: power.disclaimer,
   };
 }
 
 function clamp(v: number, min: number, max: number) {
   return Math.min(max, Math.max(min, v));
+}
+
+// --- Snellen chart -----------------------------------------------------------
+
+export type SnellenLine = { snellen: string; logMar: number; letters: string };
+
+export const SNELLEN_LINES: SnellenLine[] = [
+  { snellen: "20/200", logMar: 1.0, letters: "E" },
+  { snellen: "20/100", logMar: 0.7, letters: "F P" },
+  { snellen: "20/70", logMar: 0.54, letters: "T O Z" },
+  { snellen: "20/50", logMar: 0.4, letters: "L P E D" },
+  { snellen: "20/40", logMar: 0.3, letters: "P E C F D" },
+  { snellen: "20/30", logMar: 0.18, letters: "E D F C Z P" },
+  { snellen: "20/25", logMar: 0.1, letters: "F E L O P Z D" },
+  { snellen: "20/20", logMar: 0.0, letters: "D E F P O T E C" },
+];
+
+export type Duochrome = "red" | "green" | "equal";
+
+// --- Eye power estimate -------------------------------------------------------
+
+export type EyePower = { sph: number; cyl: number; snellen: string; note: string };
+
+const POWER_TABLE: [number, number][] = [
+  [0.0, 0], [0.1, -0.25], [0.2, -0.5], [0.3, -0.75],
+  [0.4, -1.0], [0.5, -1.5], [0.6, -2.0], [0.8, -3.0], [1.0, -4.0],
+];
+
+function quarter(v: number) {
+  return Math.round(v * 4) / 4;
+}
+
+export function sphFromLogMar(logMar: number): number {
+  if (logMar <= 0) return 0;
+  for (let i = 1; i < POWER_TABLE.length; i++) {
+    const [hiL, hiD] = POWER_TABLE[i]!;
+    const [loL, loD] = POWER_TABLE[i - 1]!;
+    if (logMar <= hiL) {
+      const t = (logMar - loL) / (hiL - loL);
+      return quarter(loD + t * (hiD - loD));
+    }
+  }
+  return -4.0;
+}
+
+export function estimateEyePower(r: TestResults): {
+  left: EyePower;
+  right: EyePower;
+  headline: string;
+  disclaimer: string;
+} {
+  const mk = (eye: "left" | "right"): EyePower => {
+    const logMar = r.snellen ? r.snellen[eye] : r.acuity[eye].logMar;
+    let sph = sphFromLogMar(logMar);
+    const duo = r.duochrome?.[eye];
+    if (duo === "red" && sph < 0) sph = quarter(sph - 0.25);
+    if (duo === "green") sph = quarter(sph + 0.25);
+    if (sph > 0) sph = 0;
+    const cyl = r.astigmatism.linesUnequal ? -0.75 : 0;
+    return {
+      sph,
+      cyl,
+      snellen: logMarToSnellen(logMar),
+      note:
+        sph === 0 && cyl === 0
+          ? "No meaningful lens power needed."
+          : `About ${sph.toFixed(2)}D${cyl ? ` with ${cyl.toFixed(2)}D cylinder` : ""}.`,
+    };
+  };
+  const left = mk("left");
+  const right = mk("right");
+  const strongest = Math.min(left.sph, right.sph);
+  const headline =
+    strongest === 0
+      ? "Your eyes look close to full strength — no lens power estimated."
+      : strongest > -0.75
+        ? `Very mild short-sightedness, around ${strongest.toFixed(2)}D.`
+        : strongest > -2
+          ? `Mild short-sightedness, around ${strongest.toFixed(2)}D — glasses would sharpen distance.`
+          : `Noticeable short-sightedness, around ${strongest.toFixed(2)}D — worth a professional eye exam.`;
+  return {
+    left,
+    right,
+    headline,
+    disclaimer:
+      "This is a screening estimate from a screen test, not a prescription. Only an eye care professional can measure and prescribe your real lens power.",
+  };
+}
+
+// How blurred the world looks, in CSS pixels, for a given lens power.
+export function blurPxForPower(sph: number): number {
+  return Math.min(14, Math.abs(sph) * 3.2);
 }
