@@ -5,6 +5,7 @@ import {
   createStaircase,
   getPlates,
   letterPxForLogMar,
+  SNELLEN_LINES,
   shuffle,
   stepStaircase,
   type AcuityAnswer,
@@ -216,7 +217,7 @@ function PlateCanvas({ number, index }: { number: string; index: number }) {
   const BG = ["oklch(0.62 0.1 120)", "oklch(0.58 0.09 145)", "oklch(0.66 0.1 95)"];
 
   return (
-    <svg viewBox="0 0 300 300" className="h-64 w-64 rounded-full border border-border sm:h-72 sm:w-72" role="img" aria-label="Color vision plate">
+    <svg viewBox="0 0 300 300" className="aspect-square w-[min(84vw,20rem)] rounded-full border border-border" role="img" aria-label="Color vision plate">
       {dots.map((d, i) => (
         <circle
           key={i}
@@ -368,6 +369,101 @@ export function ContrastRound({ onDone }: { onDone: (answers: AcuityAnswer[]) =>
       {options.length === 4 && <OptionButtons options={options} onPick={pick} />}
       <p className="mt-6 font-mono text-xs text-muted-foreground">
         Step {idx + 1} of {CONTRAST_OPACITY.length}
+      </p>
+    </RoundShell>
+  );
+}
+
+// ---------- Snellen chart -------------------------------------------------------
+
+export function SnellenChartRound({
+  eye,
+  pxPerMm,
+  onDone,
+}: {
+  eye: "left" | "right";
+  pxPerMm: number;
+  onDone: (logMar: number) => void;
+}) {
+  return (
+    <RoundShell
+      title={`Snellen chart — ${eye} eye`}
+      subtitle={`Cover your ${eye === "left" ? "right" : "left"} eye and stay an arm's length back. Tap the smallest line you can still read correctly.`}
+    >
+      <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-4 sm:p-8">
+        {SNELLEN_LINES.map((line) => (
+          <button
+            key={line.snellen}
+            onClick={() => onDone(line.logMar)}
+            className="group flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-accent"
+          >
+            <span className="w-14 shrink-0 font-mono text-[10px] text-muted-foreground">
+              {line.snellen}
+            </span>
+            <span
+              className="flex-1 text-center font-display font-bold leading-none tracking-[0.15em] text-foreground"
+              style={{ fontSize: Math.min(letterPxForLogMar(line.logMar, pxPerMm), 90) }}
+            >
+              {line.letters}
+            </span>
+          </button>
+        ))}
+      </div>
+      <button
+        onClick={() => onDone(1.3)}
+        className="mt-6 rounded-xl border border-border px-6 py-2.5 text-sm hover:bg-accent"
+      >
+        I can't read any line
+      </button>
+    </RoundShell>
+  );
+}
+
+// ---------- Red / green duochrome -------------------------------------------------
+
+export function DuochromeRound({
+  eye,
+  onDone,
+}: {
+  eye: "left" | "right";
+  onDone: (answer: "red" | "green" | "equal") => void;
+}) {
+  return (
+    <RoundShell
+      title={`Red–green test — ${eye} eye`}
+      subtitle={`Cover your ${eye === "left" ? "right" : "left"} eye. On which side do the letters look sharper and blacker?`}
+    >
+      <div className="mt-2 flex w-full max-w-md overflow-hidden rounded-2xl border border-border">
+        <div className="flex-1 bg-[#c62828] py-10 text-center">
+          <span className="font-display text-4xl font-bold text-black tracking-widest">O X</span>
+        </div>
+        <div className="flex-1 bg-[#1b8a3a] py-10 text-center">
+          <span className="font-display text-4xl font-bold text-black tracking-widest">O X</span>
+        </div>
+      </div>
+      <div className="mt-8 grid w-full max-w-md gap-3 sm:grid-cols-3">
+        <button
+          onClick={() => onDone("red")}
+          className="rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium hover:border-primary hover:bg-accent"
+        >
+          Red side
+        </button>
+        <button
+          onClick={() => onDone("equal")}
+          className="rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+        >
+          Both the same
+        </button>
+        <button
+          onClick={() => onDone("green")}
+          className="rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium hover:border-primary hover:bg-accent"
+        >
+          Green side
+        </button>
+      </div>
+      <p className="mt-6 max-w-md text-center text-xs text-muted-foreground">
+        Red clearer usually points to short-sightedness; green clearer points the other way. This
+        fine-tunes your estimated power.
       </p>
     </RoundShell>
   );
