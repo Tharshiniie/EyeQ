@@ -229,3 +229,48 @@ export const listMyDetections = createServerFn({ method: "GET" })
     );
     return withUrls;
   });
+
+export const chatWithEyeQ = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) =>
+    z
+      .object({
+        messages: z
+          .array(
+            z.object({
+              role: z.enum(["user", "assistant"]),
+              content: z.string().min(1).max(4000),
+            }),
+          )
+          .min(1)
+          .max(30),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const key = process.env["LOVABLE_API_KEY"];
+    if (!key) throw new Error("AI service is not configured");
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+      body: JSON.stringify({
+        model: "google/gemini-3.7-flash",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are EyeQ Assistant, a friendly eye-health guide inside the EyeQ vision screening app. Help users understand eye power (diopters), Snellen scores, the red-green test, colour vision, astigmatism, contrast, screen-eye strain, and how to use EyeQ (vision test, AI eye screening, results report). Keep answers under 120 words, plain language, no markdown headings. Never diagnose or prescribe; recommend an eye care professional for anything medical or urgent.",
+          },
+          ...data.messages,
+        ],
+      }),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      if (res.status === 429) throw new Error("Too many messages right now — try again shortly.");
+      if (res.status === 402) throw new Error("AI credits are exhausted for this workspace.");
+      throw new Error(`Chat failed (${res.status}): ${text.slice(0, 150)}`);
+    }
+    const json = await res.json();
+    const reply = json?.choices?.[0]?.message?.content;
+    return { reply: typeof reply === "string" && reply.trim() ? reply.trim() : "Sorry, I didn't catch that. Could you rephrase?" };
+  });
