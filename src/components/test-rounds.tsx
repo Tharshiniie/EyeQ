@@ -11,6 +11,8 @@ import {
   type AcuityAnswer,
   type Staircase,
 } from "@/lib/vision";
+import { CameraDistance } from "@/components/camera-distance";
+
 
 // ---------- shared bits ------------------------------------------------------
 
@@ -68,6 +70,7 @@ export function OptionButtons({
 
 export function CalibrationRound({ onDone }: { onDone: (pxPerMm: number) => void }) {
   const [cardPx, setCardPx] = useState(320);
+  const [distanceCm, setDistanceCm] = useState<number | null>(null);
   const CARD_MM = 85.6; // credit card width
   const pxPerMm = cardPx / CARD_MM;
 
@@ -94,6 +97,14 @@ export function CalibrationRound({ onDone }: { onDone: (pxPerMm: number) => void
       <p className="mt-2 text-xs text-muted-foreground">
         No card? The default is close enough for a screening.
       </p>
+
+      <CameraDistance onMeasure={(cm) => setDistanceCm(cm)} />
+      {distanceCm != null && (
+        <p className="mt-2 text-xs text-primary">
+          Measured distance: about {Math.round(distanceCm)} cm.
+        </p>
+      )}
+
       <button
         onClick={() => onDone(pxPerMm)}
         className="mt-8 rounded-xl bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
@@ -103,6 +114,7 @@ export function CalibrationRound({ onDone }: { onDone: (pxPerMm: number) => void
     </RoundShell>
   );
 }
+
 
 // ---------- Round 2: acuity ----------------------------------------------------
 
