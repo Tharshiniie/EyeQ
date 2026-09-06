@@ -15,7 +15,7 @@ export const Route = createFileRoute("/detect")({
         content:
           "Upload a close-up eye photo and let EyeQ's AI screen it for visible signs of common eye conditions.",
       },
-      { property: "og:title", content: "AI Eye Photo Check — EyeQ" },
+      { property: "og:title", content: "AI Eye Screening — EyeQ" },
       {
         property: "og:description",
         content: "AI screening of an eye photo for common conditions — free and anonymous.",
