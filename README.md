@@ -1,24 +1,194 @@
-# Vision Health Hub
+# 👁️ EyeQ
 
-This is my mini project .I'll tell my idea hear me out. When we open the link it should go to home page where the instructions and the details about this page will be provided. Then the test starts goes to completes all the rounds that I have said before after the test gets over it asks the user to login so that the result will be stored in the database. Note that even after the test is taken after that they are login the test result should be stored. I also want the feature like eye disease detection but as a separate test or detection which should be provided in the home page? Then prescription generation must be there, anomaly detection, Adaptive Test DifficultyEye, Health Risk Score, interactive lens. But I don't want this to be clumsy and it should be perfect for users. And the most important part me and my frnd need to build this in 3 days! Give me proper plan and sketch my idea
+### **See smarter. Understand your vision.**
 
-This project was built with [Lovable](https://lovable.dev).
+EyeQ is an AI-powered vision screening platform that brings **interactive eye testing, intelligent analysis, and personalized visual insights** into one simple experience.
 
-## Build with Lovable
+Instead of treating eye screening like a complicated medical form, EyeQ turns it into a **guided, interactive experience** designed around the user.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/e5468da9-801d-4602-a349-562754d91b57).
+> **Your eyes tell a story. EyeQ helps you understand it.**
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+---
 
-## Development
+## 🧿 What is EyeQ?
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+EyeQ is built around a simple idea:
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+**Make preliminary eye screening accessible, understandable, and engaging.**
+
+Users can begin testing without creating an account, move through a guided series of vision assessments, and receive a consolidated screening result at the end.
+
+For users who want deeper analysis, EyeQ also provides AI-assisted eye screening and additional visual tools.
+
+---
+
+## ✨ Inside EyeQ
+
+| Feature                  | What it does                                                             |
+| ------------------------ | ------------------------------------------------------------------------ |
+| 👓 **Vision Test**       | Interactive multi-round vision assessment                                |
+| 🎨 **Color Vision**      | Tests red-green color perception                                         |
+| 🔍 **Blur Assessment**   | Evaluates visual clarity through interactive testing                     |
+| 🤖 **AI Eye Screening**  | AI-assisted screening using eye images                                   |
+| 🧠 **Adaptive Testing**  | Adjusts test difficulty based on performance                             |
+| 🚨 **Anomaly Detection** | Identifies unusual patterns in screening results                         |
+| ❤️ **Eye Health Score**  | Converts screening information into an easy-to-understand risk indicator |
+| 📋 **Mock Prescription** | Generates an estimated optical prescription for demonstration            |
+
+---
+
+## 🪄 Designed Around the User
+
+EyeQ follows a **test-first, login-later** approach.
+
+No account.
+
+No unnecessary forms.
+
+Just start.
+
+```text
+        OPEN EYEQ
+            ↓
+      Learn & Explore
+            ↓
+       Start Testing
+            ↓
+      Vision Rounds
+            ↓
+    Intelligent Analysis
+            ↓
+       Your Results
+            ↓
+      Login / Sign Up
+            ↓
+      Save Your Results
+```
+
+The user's screening session is retained until authentication, allowing results taken **before login** to be associated with their account afterward.
+
+---
+
+## 🧠 Where AI Comes In
+
+EyeQ isn't just a collection of eye tests.
+
+The project explores how **Artificial Intelligence, Machine Learning, and Computer Vision** can be used to make digital vision screening more intelligent.
+
+### AI concepts explored
+
+* 👁️ Image-based eye screening
+* 🔎 Computer vision
+* 🚨 Anomaly detection
+* 📊 Risk prediction
+* 🧠 Adaptive testing
+* 📋 Prescription estimation
+
+The goal is not to replace an eye-care professional.
+
+The goal is to explore how technology can provide **useful preliminary insights** before professional evaluation.
+
+---
+
+## 🎨 Experience > Complexity
+
+EyeQ is intentionally designed so that advanced functionality doesn't overwhelm the user.
+
+Instead of putting every feature on one screen:
+
+**Core screening comes first.**
+
+Additional tools are available separately for users who want deeper insights.
+
+### The philosophy
+
+> **Simple enough for anyone.
+> Intelligent enough to be interesting.**
+
+---
+
+## ⚙️ Technology
+
+**Frontend**
+
+`React.js` · `Vite` · `JavaScript` · `CSS`
+
+**AI / ML**
+
+`Python` · `Machine Learning` · `Computer Vision` · `Image Processing`
+
+**Data**
+
+`Authentication` · `Database` · `API Integration`
+
+**Deployment**
+
+`GitHub` · `Vercel`
+
+---
+
+## 🚀 Run EyeQ Locally
+
+Clone the repository:
+
+```bash
+git clone <your-github-repository-url>
+```
+
+Move into the project:
+
+```bash
+cd eyeq
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
+
+---
+
+## 🌐 Live
+
+🔗 **[Try EyeQ](your-vercel-url)**
+
+---
+
+## 🛣️ What's Next?
+
+EyeQ is designed to grow beyond basic screening.
+
+Future possibilities include:
+
+* 📷 Real-time camera-based eye tracking
+* 🧠 More advanced computer-vision models
+* 🔬 Expanded eye-condition screening
+* 📈 Long-term vision history
+* 🎯 More personalized adaptive testing
+* 📱 Mobile-first experience
+* 👨‍⚕️ Professional eye-care integration
+
+---
+
+## ⚠️ Important
+
+EyeQ is a **screening and educational project**, not a medical diagnostic system.
+
+Results generated by the platform—including risk scores, anomaly detection, and mock prescriptions—should not be treated as medical diagnoses or clinically valid prescriptions.
+
+For concerns about vision or eye health, consult a qualified eye-care professional.
+
+---
+
+## 💡 Why EyeQ?
+
+Because checking your vision shouldn't feel like filling out a medical form.
+
+**EyeQ — See smarter. Understand your vision.**
