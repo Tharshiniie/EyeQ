@@ -11,6 +11,8 @@ import {
   type AcuityAnswer,
   type Staircase,
 } from "@/lib/vision";
+import { CameraDistance } from "@/components/camera-distance";
+
 
 // ---------- shared bits ------------------------------------------------------
 
