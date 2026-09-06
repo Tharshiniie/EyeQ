@@ -9,13 +9,13 @@ import { useAuth } from "@/hooks/use-auth";
 export const Route = createFileRoute("/detect")({
   head: () => ({
     meta: [
-      { title: "AI Eye Photo Check — EyeQ" },
+      { title: "AI Eye Screening — EyeQ" },
       {
         name: "description",
         content:
           "Upload a close-up eye photo and let EyeQ's AI screen it for visible signs of common eye conditions.",
       },
-      { property: "og:title", content: "AI Eye Photo Check — EyeQ" },
+      { property: "og:title", content: "AI Eye Screening — EyeQ" },
       {
         property: "og:description",
         content: "AI screening of an eye photo for common conditions — free and anonymous.",
@@ -81,7 +81,7 @@ function DetectPage() {
     <div className="mx-auto max-w-2xl px-4 py-12">
       <div className="text-center">
         <ScanEye className="mx-auto h-10 w-10 text-primary" />
-        <h1 className="mt-4 text-3xl font-bold">AI eye photo check</h1>
+        <h1 className="mt-4 text-3xl font-bold">AI eye screening</h1>
         <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
           Take a well-lit close-up of one open eye (or use an existing photo). The AI screens for
           visible signs of common conditions. Anonymous — nothing is uploaded to your account
