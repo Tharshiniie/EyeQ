@@ -8,7 +8,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { Eye } from "lucide-react";
+import { Eye, Home } from "lucide-react";
+import { EyeQChat } from "@/components/eyeq-chat";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -142,6 +143,12 @@ function Header() {
         </Link>
         <nav className="flex items-center gap-1 text-sm">
           <Link
+            to="/"
+            className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            <Home className="h-4 w-4" /> Home
+          </Link>
+          <Link
             to="/test"
             className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           >
@@ -151,7 +158,7 @@ function Header() {
             to="/detect"
             className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           >
-            Photo check
+            AI eye screening
           </Link>
           <ThemeToggle />
           {user ? (
@@ -193,6 +200,7 @@ function RootComponent() {
             prescribe. Always consult a qualified eye care professional.
           </p>
         </footer>
+        <EyeQChat />
       </div>
     </QueryClientProvider>
   );

@@ -29,8 +29,8 @@ const features = [
   },
   {
     icon: ScanEye,
-    title: "Eye disease detection",
-    text: "Upload a close-up photo of your eye and our AI screens it for visible signs of common conditions, with confidence and next steps.",
+    title: "AI eye screening",
+    text: "Upload a close-up photo of your eye and our AI screens it for visible signs of common conditions, with confidence and clear next steps.",
   },
   {
     icon: ShieldAlert,
@@ -82,13 +82,13 @@ function HomePage() {
               Free · Anonymous · ~4 min
             </p>
             <h1 className="mt-6 text-4xl font-bold leading-[1.05] sm:text-6xl">
-              Know your eyes in
+              Your eye power,
               <br />
-              <span className="text-primary text-glow">four minutes</span>
+              <span className="text-primary text-glow">measured at home</span>
             </h1>
             <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-foreground sm:text-lg">
-              An adaptive vision screening that runs entirely in your browser — no account, no
-              download. Log in afterwards only if you want to keep your results.
+              EyeQ estimates your eye power in dioptres, screens color and contrast vision, and
+              lets AI examine an eye photo — all in about four minutes, no account needed.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
@@ -104,7 +104,7 @@ function HomePage() {
                 className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3.5 text-sm font-semibold transition-colors hover:bg-accent"
               >
                 <Camera className="h-4 w-4" />
-                Check an eye photo
+                AI eye screening
               </Link>
             </div>
             <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-border pt-6">

@@ -15,6 +15,7 @@ import {
 import { readPendingTest } from "@/lib/pending";
 import { useAuth } from "@/hooks/use-auth";
 import { writeAdvisory } from "@/lib/eyeq.functions";
+import busScene from "@/assets/bus-scene.jpg";
 
 export const Route = createFileRoute("/results")({
   head: () => ({
@@ -365,18 +366,16 @@ function LensSimulator({ sph }: { sph: number }) {
       <p className="border-b border-border bg-secondary/60 px-4 py-2 text-center font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
         {label}
       </p>
-      <div className="relative flex h-52 items-center justify-center overflow-hidden bg-gradient-to-b from-secondary/40 to-card">
-        <div
-          className="w-full px-6 text-center transition-[filter] duration-150"
+      <div className="relative flex h-52 items-center justify-center overflow-hidden bg-card">
+        <img
+          src={busScene}
+          alt="A bus arriving at the Central stop, destination sign reading 42 Central"
+          width={1024}
+          height={640}
+          loading="lazy"
+          className="h-full w-full object-cover transition-[filter] duration-150"
           style={{ filter: `blur(${px}px)` }}
-        >
-          <p className="font-display text-2xl font-bold tracking-wide">PLATFORM 3</p>
-          <p className="mt-1 font-display text-lg font-semibold text-primary">Bus 42 · Central</p>
-          <p className="mt-3 text-xs text-muted-foreground">Departs 14:20 — stand behind the line</p>
-          <p className="mt-3 font-mono text-[11px] text-muted-foreground">
-            E F P T O Z &nbsp; L P E D
-          </p>
-        </div>
+        />
       </div>
     </div>
   );
