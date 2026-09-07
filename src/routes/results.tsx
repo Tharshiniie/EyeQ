@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Download, Home, Loader2, Sparkles } from "lucide-react";
+import { Download, Home, Loader2, Sparkles, Trash2 } from "lucide-react";
 import {
   blurPxForPower,
   computeRiskScore,
@@ -12,7 +12,7 @@ import {
   riskBand,
   type TestResults,
 } from "@/lib/vision";
-import { readPendingTest } from "@/lib/pending";
+import { clearPendingTest, readPendingTest } from "@/lib/pending";
 import { useAuth } from "@/hooks/use-auth";
 import { writeAdvisory } from "@/lib/eyeq.functions";
 import busScene from "@/assets/bus-scene.jpg";
@@ -78,6 +78,7 @@ function ResultsPage() {
 }
 
 function ResultsView({ results, signedIn }: { results: TestResults; signedIn: boolean }) {
+  const navigate = useNavigate();
   const score = useMemo(() => computeRiskScore(results), [results]);
   const band = riskBand(score);
   const flags = useMemo(() => detectAnomalies(results), [results]);
@@ -297,6 +298,15 @@ function ResultsView({ results, signedIn }: { results: TestResults; signedIn: bo
           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border px-8 py-3.5 text-sm font-semibold hover:bg-secondary"
         >
           <Download className="h-4 w-4" /> Download report
+        </button>
+        <button
+          onClick={() => {
+            clearPendingTest();
+            navigate({ to: "/test" });
+          }}
+          className="flex items-center justify-center gap-2 rounded-xl border border-destructive/40 px-8 py-3.5 text-sm font-semibold text-destructive hover:bg-destructive/10"
+        >
+          <Trash2 className="h-4 w-4" /> Clear results
         </button>
       </section>
 
