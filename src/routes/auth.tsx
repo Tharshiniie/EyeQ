@@ -42,12 +42,13 @@ function AuthPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       } else {
-        const { error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-        setMessage({
-          tone: "ok",
-          text: "Account created. If email confirmation is on, check your inbox — otherwise you're signed in.",
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: window.location.origin },
         });
+        if (error) throw error;
+        setMessage({ tone: "ok", text: "Account created — signing you in…" });
       }
     } catch (err) {
       setMessage({ tone: "err", text: err instanceof Error ? err.message : "Something went wrong" });

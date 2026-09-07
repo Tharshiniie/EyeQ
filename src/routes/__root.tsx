@@ -161,17 +161,23 @@ function Header() {
             AI eye screening
           </Link>
           <ThemeToggle />
+          <Link
+            to="/dashboard"
+            className="rounded-md px-3 py-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            My results
+          </Link>
           {user ? (
-            <Link
-              to="/dashboard"
-              className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="rounded-md border border-border px-3 py-1.5 text-foreground transition-colors hover:bg-accent"
             >
-              My results
-            </Link>
+              Log out
+            </button>
           ) : (
             <Link
               to="/auth"
-              className="rounded-md border border-border px-3 py-1.5 text-foreground transition-colors hover:bg-accent"
+              className="rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
               Log in
             </Link>
