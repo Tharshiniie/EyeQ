@@ -299,6 +299,15 @@ function ResultsView({ results, signedIn }: { results: TestResults; signedIn: bo
         >
           <Download className="h-4 w-4" /> Download report
         </button>
+        <button
+          onClick={() => {
+            clearPendingTest();
+            navigate({ to: "/test" });
+          }}
+          className="flex items-center justify-center gap-2 rounded-xl border border-destructive/40 px-8 py-3.5 text-sm font-semibold text-destructive hover:bg-destructive/10"
+        >
+          <Trash2 className="h-4 w-4" /> Clear results
+        </button>
       </section>
 
       <p className="mt-8 text-xs leading-relaxed text-muted-foreground">
