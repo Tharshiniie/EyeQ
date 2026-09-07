@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Download, Home, Loader2, Sparkles } from "lucide-react";
+import { Download, Home, Loader2, Sparkles, Trash2 } from "lucide-react";
 import {
   blurPxForPower,
   computeRiskScore,
@@ -12,7 +12,7 @@ import {
   riskBand,
   type TestResults,
 } from "@/lib/vision";
-import { readPendingTest } from "@/lib/pending";
+import { clearPendingTest, readPendingTest } from "@/lib/pending";
 import { useAuth } from "@/hooks/use-auth";
 import { writeAdvisory } from "@/lib/eyeq.functions";
 import busScene from "@/assets/bus-scene.jpg";
