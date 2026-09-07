@@ -78,6 +78,7 @@ function ResultsPage() {
 }
 
 function ResultsView({ results, signedIn }: { results: TestResults; signedIn: boolean }) {
+  const navigate = useNavigate();
   const score = useMemo(() => computeRiskScore(results), [results]);
   const band = riskBand(score);
   const flags = useMemo(() => detectAnomalies(results), [results]);
